@@ -457,7 +457,6 @@ struct CommandOctreeNormal : public ccCommandLineInterface::Command
 	virtual bool process(ccCommandLineInterface& cmd) override
 	{
 		cmd.print("[OCTREE NORMALS CALCULATION]");
-		ccLog::Error("OCTREE NORMALS CALCULATION");
 		if (cmd.clouds().empty())
 		{
 			return cmd.error(QString("No point cloud to normal calculation (be sure to open one with \"-%1 [cloud filename]\" before \"-%2\")").arg(COMMAND_OPEN).arg(COMMAND_SUBSAMPLE));
@@ -480,9 +479,9 @@ struct CommandOctreeNormal : public ccCommandLineInterface::Command
 		CC_LOCAL_MODEL_TYPES model = QUADRIC;
 		ccNormalVectors::Orientation  orientation = ccNormalVectors::Orientation::UNDEFINED;
 		PointCoordinateType defaultRadius = radius;
-		for (size_t i = 0; i < cmd.clouds().size(); ++i)
+        for (const CLCloudDesc& thisCloud : cmd.clouds())
 		{
-			ccPointCloud* cloud = cmd.clouds()[i].pc;
+			ccPointCloud* cloud = thisCloud.pc;
 			cmd.print("computeNormalsWithOctree started...\n");
 			bool success = cloud->computeNormalsWithOctree(QUADRIC, orientation, defaultRadius, nullptr);
 			if(success){
